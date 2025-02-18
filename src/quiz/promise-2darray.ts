@@ -5,27 +5,20 @@
  * or rejects if the array is empty
  */
 function sum2DArray(arr: number[][]): Promise<number> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         console.log('Sum called ... ');
-        if(arr.length === 0) {
-            reject('Cannot sum an empty array');
+        if (arr.length === 0) {
+            resolve(0);
         }
-        /** schedule the execution of the function to the next event loop cycle.
-         * This is done using setTimeout() to simulate an asynchronous operations.
-         * 
-         * Replace the logic in the setTimeout() with the actual logic to sum the numbers
-         * to understand the difference in execution with and without setTimeout()
-         **/
-        setTimeout(() => {
-            let sum = 0;
-            for (let i = 0; i < arr.length; i++) {
-                for (let j = 0; j < arr[i].length; j++) {
-                    console.log(`Adding ${arr[i][j]} to sum`);
-                    sum += arr[i][j];
-                }
+        // Immediately perform the summing logic:
+        let sum = 0;
+        for (let i = 0; i < arr.length; i++) {
+            for (let j = 0; j < arr[i].length; j++) {
+                console.log(`Adding ${arr[i][j]} to sum`);
+                sum += arr[i][j];
             }
-            resolve(sum);
-        }, 0);
+        }
+        resolve(sum);
         console.log('returning from sum');
     });
 }
