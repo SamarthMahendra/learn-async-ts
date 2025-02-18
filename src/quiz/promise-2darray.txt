@@ -5,9 +5,22 @@
 
 
 
+1. After extracting the code from setTimeout:
+I removed the setTimeout so that the summing logic now runs immediately in the promise executor instead of waiting for the next event loop cycle.
 
-The original sum2DArray() function wrapped the summing logic inside a setTimeout, which deferred the actual computation until the next event loop cycle. As a result, when the function was called, it immediately returned a pending promise, and no immediate result or error message was logged.
+2. Is there a difference in the flow of execution?
+Yes. With setTimeout, the computation is delayed as a macrotask, but without it, the computation happens immediately (synchronously) during the promise creation—even though the .then() callbacks still run as microtasks.
 
-By extracting the code from the setTimeout and running it directly in the promise executor, the computation occurs immediately. However, even though the executor runs synchronously, the promise resolution (or rejection) callbacks (.then() and .catch()) are always called asynchronously as microtasks.
+3. Is the flow of execution different from using the fetch() API?
+Yes. The fetch() API waits for an external network response to resolve its promise, whereas our examples run CPU-bound tasks with timing determined by the event loop.
 
-This differs from the behavior of the fetch() API, where the promise returned resolves asynchronously once the network request completes. In summary, using setTimeout defers execution to a later macrotask, whereas running the code immediately in the executor performs the computation synchronously (with the eventual resolution still asynchronous). The fetch() API’s asynchronous behavior, on the other hand, is driven by I/O operations.
+4. Explanation of the code execution difference:
+
+With setTimeout: Code runs later as a macrotask.
+Direct execution: Code runs immediately (synchronously) in the promise executor, though promise callbacks are still asynchronous.
+Using fetch(): Promise resolution depends on I/O (network response), making its asynchrony fundamentally different.
+
+
+
+
+
